@@ -7,9 +7,10 @@ interface StatsBarProps {
 export function StatsBar({ beforeChars, afterChars, changes }: StatsBarProps) {
   const delta = afterChars - beforeChars;
   const deltaLabel = delta > 0 ? `+${delta}` : String(delta);
+  const compactRate = beforeChars === 0 ? 0 : Math.round(((beforeChars - afterChars) / beforeChars) * 100);
 
   return (
-    <div className="grid gap-3 sm:grid-cols-3">
+    <div className="grid gap-3 sm:grid-cols-4">
       <div className="rounded-2xl border border-stone-300 bg-white/75 p-4">
         <span className="text-xs text-stone-500">处理前</span>
         <strong className="mt-1 block text-2xl text-ink">{beforeChars}</strong>
@@ -24,6 +25,10 @@ export function StatsBar({ beforeChars, afterChars, changes }: StatsBarProps) {
       <div className="rounded-2xl border border-stone-300 bg-white/75 p-4">
         <span className="text-xs text-stone-500">修改数量</span>
         <strong className="mt-1 block text-2xl text-ink">{changes}</strong>
+      </div>
+      <div className="rounded-2xl border border-stone-300 bg-white/75 p-4">
+        <span className="text-xs text-stone-500">压缩比例</span>
+        <strong className="mt-1 block text-2xl text-ink">{compactRate}%</strong>
       </div>
     </div>
   );
