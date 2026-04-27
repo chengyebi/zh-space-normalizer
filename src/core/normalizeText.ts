@@ -208,18 +208,8 @@ function trimSpacesAroundProtectedSegments(segments: Segment[]): { segments: Seg
     }
 
     const previous = next[index - 1];
-    const following = next[index + 1];
-
     if (previous?.type === 'protected') {
       const trimmed = segment.text.replace(/^[ \t]+(?=[\p{Script=Han}，。！？；：、,.!?;:）】》」』])/u, '');
-      if (trimmed !== segment.text) {
-        changes += 1;
-        segment.text = trimmed;
-      }
-    }
-
-    if (following?.type === 'protected') {
-      const trimmed = segment.text.replace(/(?<=[\p{Script=Han}（【《「『])[ \t]+$/u, '');
       if (trimmed !== segment.text) {
         changes += 1;
         segment.text = trimmed;
