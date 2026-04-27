@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModeSelector } from './components/ModeSelector';
 import { StatsBar } from './components/StatsBar';
 import { TextPanel } from './components/TextPanel';
@@ -315,11 +315,10 @@ export default function App() {
   const [problemOpen, setProblemOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [demoRun, setDemoRun] = useState(0);
-  const deferredInput = useDeferredValue(input);
-  const textToNormalize = input === '' ? '' : deferredInput;
+  const [inputScrollSignal, setInputScrollSignal] = useState(0);
 
   const startTime = performance.now();
-  const result = normalizeTextWithStats(textToNormalize, { mode });
+  const result = normalizeTextWithStats(input, { mode });
   const durationMs = performance.now() - startTime;
   const hasInput = input.length > 0;
   const hasOutput = result.text.length > 0;
@@ -338,6 +337,7 @@ export default function App() {
   function clearText() {
     setInput('');
     setCopyState('idle');
+    setInputScrollSignal((signal) => signal + 1);
   }
 
   function openDemo() {
@@ -347,6 +347,7 @@ export default function App() {
 
   function useExample() {
     setInput(exampleText);
+    setInputScrollSignal((signal) => signal + 1);
     setDemoOpen(false);
   }
 
@@ -414,12 +415,14 @@ export default function App() {
           title="输入"
           value={input}
           placeholder="粘贴 AI 生成的报告、论文、小红书文案或公众号文案……"
+          scrollToTopSignal={inputScrollSignal}
           onChange={setInput}
         />
         <TextPanel
           title="输出"
           value={result.text}
           placeholder="处理结果会实时显示在这里。"
+          scrollToTopOnValueChange
           readOnly
         />
       </section>
