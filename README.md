@@ -4,6 +4,12 @@
 
 它不是粗暴删除所有空格，而是中文语境下的智能空格规范化工具：会移除中文与英文、数字、中文之间不自然的空格，同时保留英文短语内部空格，例如 `OpenAI API`、`Visual Studio Code`、`High Performance Web Server`、`C++ Primer`、`New York Times`。
 
+## Why this tool?
+
+普通删除空格工具或 Word 全文替换会破坏英文短语和代码，例如把 `OpenAI API` 变成 `OpenAIAPI`，把 `Visual Studio Code` 变成 `VisualStudioCode`，甚至误伤 Markdown 行内代码和代码块。
+
+zh-space-normalizer 面向中文 AI 写作后的文本清洗：删除中文与英文、数字之间的异常空格，同时保留英文短语、数字序列、Markdown 行内代码和代码块。它解决的是“该删的空格”和“不该删的空格”之间的边界问题。
+
 ## 特性
 
 - 工具优先布局：页面打开后默认输入为空，左右输入/输出区域是视觉中心。
