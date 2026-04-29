@@ -66,6 +66,19 @@ describe('normalizeText core rules', () => {
     expect(normalizeText(codeBlock)).toBe(codeBlock);
   });
 
+  it('removes decorative blank lines in standard mode', () => {
+    expect(normalizeText(['first paragraph', '', '   ', 'second paragraph'].join('\n'))).toBe(
+      ['first paragraph', 'second paragraph'].join('\n'),
+    );
+  });
+
+  it('keeps blank lines inside fenced Markdown code blocks', () => {
+    const input = ['before', '', '```txt', 'line 1', '', 'line 2', '```', '', 'after'].join('\n');
+    const expected = ['before', '```txt', 'line 1', '', 'line 2', '```', 'after'].join('\n');
+
+    expect(normalizeText(input)).toBe(expected);
+  });
+
   it('normalizes the full mixed sample', () => {
     const input = [
       '这是一个 AI 写作 工具，可以处理 GPT-5 生成的 报告。',
@@ -73,7 +86,6 @@ describe('normalizeText core rules', () => {
       '项目使用 OpenAI API，并包含 3 个模块 和 2 个页面。',
       '你好 ， 世界 ！ 请使用 （ 示例 ） 。',
       '请运行 `npm run build`，然后查看 AI 结果。',
-      '',
       '```cpp',
       'int main() {',
       '    return 0;',
@@ -87,7 +99,6 @@ describe('normalizeText core rules', () => {
       '项目使用OpenAI API，并包含3个模块和2个页面。',
       '你好，世界！请使用（示例）。',
       '请运行 `npm run build`，然后查看AI结果。',
-      '',
       '```cpp',
       'int main() {',
       '    return 0;',
@@ -117,7 +128,6 @@ describe('normalizeText modes and stats', () => {
 
     const expected = [
       '我推荐使用Visual Studio Code编辑器。',
-      '',
       'OpenAI API is useful.',
       '请运行 `npm   run   build`，然后查看AI结果。',
     ].join('\n');

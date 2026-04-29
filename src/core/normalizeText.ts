@@ -244,6 +244,29 @@ function normalizeAggressively(state: MutableState): MutableState {
   return next;
 }
 
+function removeBlankLines(input: string): MutableState {
+  let changes = 0;
+  const text = input
+    .split(/(\r\n|\n|\r)/)
+    .reduce((output, part, index, parts) => {
+      if (index % 2 === 1) {
+        return output;
+      }
+
+      const line = part;
+      const newline = parts[index + 1] ?? '';
+
+      if (newline && /^[ \t]*$/.test(line)) {
+        changes += 1;
+        return output;
+      }
+
+      return output + line + newline;
+    }, '');
+
+  return { text, changes };
+}
+
 function normalizePlainText(input: string, mode: NormalizeMode): MutableState {
   const parts = input.split(/(\r\n|\n|\r)/);
   let changes = 0;
@@ -288,12 +311,6 @@ function normalizePlainText(input: string, mode: NormalizeMode): MutableState {
     text += normalizedLine + newline;
   }
 
-  if (mode === 'aggressive') {
-    const compressed = replaceAndCount(text, /\n{3,}/g, '\n\n');
-    text = compressed.text;
-    changes += compressed.changes;
-  }
-
   return { text, changes };
 }
 
@@ -310,8 +327,9 @@ export function normalizeTextWithStats(
       }
 
       const normalized = normalizePlainText(segment.text, mode);
-      changes += normalized.changes;
-      return normalized.text;
+      const blankLineRemoved = removeBlankLines(normalized.text);
+      changes += normalized.changes + blankLineRemoved.changes;
+      return blankLineRemoved.text;
     })
     .join('');
 
