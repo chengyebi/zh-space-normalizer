@@ -106,26 +106,28 @@ function ProblemDialog({ onClose }: { onClose: () => void }) {
         </div>
         <div className="space-y-4 text-sm leading-7 text-stone-700">
           <p>
-            很多人在处理 AI 生成的中文报告、论文、公众号文案或小红书文案时，会遇到一个常见问题：中英文、数字和中文之间经常被自动加上空格。
+            很多人在处理 AI 生成的中文报告、论文、公众号文案或小红书文案时，会遇到两个常见问题：中英文、数字和中文之间经常被自动加上空格，段落之间也常常夹着只是为了“看起来松一点”的空行。
           </p>
           <p>
-            如果在 Word 里直接用 Ctrl + H 把所有空格替换为空，会误删本来应该保留的空格。
+            如果在 Word 里直接用 Ctrl + H 把所有空格替换为空，会误删本来应该保留的空格；如果手动删空行，又很容易漏掉只包含空格或 Tab 的空白行。
           </p>
           <div className="grid gap-2 rounded-2xl border border-stone-300 bg-white/70 p-4 font-mono text-xs leading-6 text-stone-700">
             <span>OpenAI API → OpenAIAPI</span>
             <span>Visual Studio Code → VisualStudioCode</span>
             <span>High Performance Web Server → HighPerformanceWebServer</span>
+            <span>段落一↵↵段落二 → 段落一↵段落二</span>
           </div>
           <p>
-            这些英文短语内部的空格是正常内容，不应该被删除。本工具解决的是这个边界问题：清理中文与英文、数字之间的异常空格，同时保留英文短语内部的正常空格。
+            这些英文短语内部的空格是正常内容，不应该被删除；纯粹用来撑版面的空行则没有实际内容。本工具解决的是这个边界问题：清理中文与英文、数字之间的异常空格，删除多余空行，同时保留英文短语、行内代码和代码块内部的正常内容。
           </p>
           <div className="grid gap-2 rounded-2xl border border-stone-300 bg-white/70 p-4 text-sm">
             <span>“这是一个 AI 工具” → “这是一个AI工具”</span>
             <span>“我有 3 个模块” → “我有3个模块”</span>
+            <span>删除空白行和只包含空格、Tab 的空行</span>
             <span>保留 “OpenAI API”、“Visual Studio Code”、“High Performance Web Server”</span>
           </div>
           <p>
-            因此，它更适合用来做 AI 中文写作后的二次清洗，而不是粗暴地删除全文所有空格。
+            因此，它更适合用来做 AI 中文写作后的二次清洗，而不是粗暴地删除全文所有空格或破坏代码示例的排版。
           </p>
           <p className="rounded-2xl bg-moss/10 px-4 py-3 text-moss">
             本工具在浏览器本地运行，不调用 API，不上传文本。
